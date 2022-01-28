@@ -176,7 +176,7 @@ async fn main() -> eyre::Result<()> {
             let provider = Provider::try_from(rpc_url)?;
             println!("{}", Cast::new(&provider).transaction(hash, field, to_json).await?)
         }
-        Subcommands::SendTx { eth, to, sig, cast_async, args } => {
+        Subcommands::SendTx { eth, to, sig, cast_async, args, legacy } => {
             let provider = Provider::try_from(eth.rpc_url()?)?;
             let chain_id = Cast::new(&provider).chain_id().await?;
 
@@ -191,6 +191,7 @@ async fn main() -> eyre::Result<()> {
                             eth.chain,
                             eth.etherscan_api_key,
                             cast_async,
+                            legacy || utils::is_legacy(chain_id.as_u64()),
                         )
                         .await?;
                     }
@@ -203,6 +204,7 @@ async fn main() -> eyre::Result<()> {
                             eth.chain,
                             eth.etherscan_api_key,
                             cast_async,
+                            legacy || utils::is_legacy(chain_id.as_u64()),
                         )
                         .await?;
                     }
@@ -215,6 +217,7 @@ async fn main() -> eyre::Result<()> {
                             eth.chain,
                             eth.etherscan_api_key,
                             cast_async,
+                            legacy || utils::is_legacy(chain_id.as_u64()),
                         )
                         .await?;
                     }
@@ -229,6 +232,7 @@ async fn main() -> eyre::Result<()> {
                     eth.chain,
                     eth.etherscan_api_key,
                     cast_async,
+                    legacy || utils::is_legacy(chain_id.as_u64()),
                 )
                 .await?;
             }
@@ -567,6 +571,7 @@ async fn cast_send<M: Middleware, F: Into<NameOrAddress>, T: Into<NameOrAddress>
     chain: Chain,
     etherscan_api_key: Option<String>,
     cast_async: bool,
+    legacy: bool,
 ) -> eyre::Result<()>
 where
     M::Error: 'static,
@@ -576,7 +581,7 @@ where
     let sig = args.0;
     let params = args.1;
     let params = if !sig.is_empty() { Some((&sig[..], params)) } else { None };
-    let pending_tx = cast.send(from, to, params, chain, etherscan_api_key).await?;
+    let pending_tx = cast.send(from, to, params, chain, etherscan_api_key, legacy).await?;
     let tx_hash = *pending_tx;
 
     if cast_async {

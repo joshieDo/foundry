@@ -7,7 +7,7 @@ use ethers_core::{
         token::{LenientTokenizer, Tokenizer},
         Abi, AbiParser, Token,
     },
-    types::{Chain, *},
+    types::{transaction::eip2718::TypedTransaction, Chain, *},
     utils::{self, keccak256},
 };
 
@@ -142,9 +142,15 @@ where
         args: Option<(&str, Vec<String>)>,
         chain: Chain,
         etherscan_api_key: Option<String>,
+        legacy: bool,
     ) -> Result<PendingTransaction<'_, M::Provider>> {
         let (tx, _) = self.build_tx(from, to, args, chain, etherscan_api_key).await?;
-        let res = self.provider.send_transaction(tx, None).await?;
+
+        let res = if legacy {
+            self.provider.send_transaction(TypedTransaction::Legacy(tx.into()), None).await?
+        } else {
+            self.provider.send_transaction(tx, None).await?
+        };
 
         Ok::<_, eyre::Error>(res)
     }
