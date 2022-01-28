@@ -179,6 +179,7 @@ async fn main() -> eyre::Result<()> {
         Subcommands::SendTx { eth, to, sig, cast_async, args, legacy } => {
             let provider = Provider::try_from(eth.rpc_url()?)?;
             let chain_id = Cast::new(&provider).chain_id().await?;
+            let legacy_tx = legacy_tx || Chain::try_from(chain_id.as_u64()).is_legacy();
 
             if let Some(signer) = eth.signer_with(chain_id, provider.clone()).await? {
                 match signer {
@@ -191,7 +192,7 @@ async fn main() -> eyre::Result<()> {
                             eth.chain,
                             eth.etherscan_api_key,
                             cast_async,
-                            legacy || utils::is_legacy(chain_id.as_u64()),
+                            legacy_tx,
                         )
                         .await?;
                     }
@@ -204,7 +205,7 @@ async fn main() -> eyre::Result<()> {
                             eth.chain,
                             eth.etherscan_api_key,
                             cast_async,
-                            legacy || utils::is_legacy(chain_id.as_u64()),
+                            legacy_tx,
                         )
                         .await?;
                     }
@@ -217,7 +218,7 @@ async fn main() -> eyre::Result<()> {
                             eth.chain,
                             eth.etherscan_api_key,
                             cast_async,
-                            legacy || utils::is_legacy(chain_id.as_u64()),
+                            legacy_tx,
                         )
                         .await?;
                     }
@@ -232,7 +233,7 @@ async fn main() -> eyre::Result<()> {
                     eth.chain,
                     eth.etherscan_api_key,
                     cast_async,
-                    legacy || utils::is_legacy(chain_id.as_u64()),
+                    legacy_tx,
                 )
                 .await?;
             }
