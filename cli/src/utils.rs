@@ -1,6 +1,9 @@
 use std::path::PathBuf;
 
-use ethers::solc::{artifacts::Contract, EvmVersion};
+use ethers::{
+    solc::{artifacts::Contract, EvmVersion},
+    types::Chain,
+};
 #[cfg(feature = "evmodin-evm")]
 use evmodin::Revision;
 use eyre::{ContextCompat, WrapErr};
@@ -142,3 +145,16 @@ macro_rules! p_println {
     }}
 }
 pub(crate) use p_println;
+
+/// Helper function for checking if a chainid corresponds to a legacy chainid
+/// without eip1559
+pub fn is_legacy<T: TryInto<Chain>>(chain: T) -> bool {
+    let chain = match chain.try_into() {
+        Ok(inner) => inner,
+        _ => return false,
+    };
+
+    use Chain::*;
+    // TODO: Add other chains which do not support EIP1559.
+    matches!(chain, Optimism | OptimismKovan | Fantom | FantomTestnet)
+}

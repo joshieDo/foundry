@@ -3,11 +3,11 @@
 use crate::{
     cmd::{build::BuildArgs, Cmd},
     opts::{EthereumOpts, WalletType},
+    utils,
 };
 use ethers::{
     abi::{Abi, Constructor, Token},
     prelude::{artifacts::BytecodeObject, ContractFactory, Http, Middleware, Provider},
-    types::Chain,
 };
 
 use eyre::Result;
@@ -96,7 +96,8 @@ impl CreateArgs {
         let factory = ContractFactory::new(abi, bin, Arc::new(provider));
 
         let deployer = factory.deploy_tokens(args)?;
-        let deployer = if self.legacy || is_legacy(chain) { deployer.legacy() } else { deployer };
+        let deployer =
+            if self.legacy || utils::is_legacy(chain) { deployer.legacy() } else { deployer };
 
         let deployed_contract = deployer.send().await?;
 
@@ -116,17 +117,4 @@ impl CreateArgs {
 
         parse_tokens(params, true)
     }
-}
-
-/// Helper function for checking if a chainid corresponds to a legacy chainid
-/// without eip1559
-fn is_legacy<T: TryInto<Chain>>(chain: T) -> bool {
-    let chain = match chain.try_into() {
-        Ok(inner) => inner,
-        _ => return false,
-    };
-
-    use Chain::*;
-    // TODO: Add other chains which do not support EIP1559.
-    matches!(chain, Optimism | OptimismKovan | Fantom | FantomTestnet)
 }
