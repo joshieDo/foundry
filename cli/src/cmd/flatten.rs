@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use ethers::solc::remappings::Remapping;
+use ethers::compile::remappings::Remapping;
 
 use crate::cmd::{build::BuildArgs, Cmd};
 use clap::{Parser, ValueHint};

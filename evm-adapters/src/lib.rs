@@ -232,7 +232,7 @@ mod test_helpers {
     use super::*;
     use ethers::{
         prelude::Lazy,
-        solc::{
+        compile::{
             artifacts::CompactContractRef, AggregatedCompilerOutput, Project, ProjectPathsConfig,
         },
     };

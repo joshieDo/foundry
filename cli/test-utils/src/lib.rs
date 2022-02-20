@@ -7,4 +7,4 @@ mod macros;
 pub mod util;
 pub use util::{TestCommand, TestProject};
 
-pub use ethers_solc;
+pub use ethers_compile;

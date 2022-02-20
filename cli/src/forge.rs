@@ -4,7 +4,7 @@ mod utils;
 
 use crate::cmd::Cmd;
 
-use ethers::solc::{self, report::BasicStdoutReporter, Project, ProjectPathsConfig};
+use ethers::compile::{self, solc::report::BasicStdoutReporter, Project, ProjectPathsConfig};
 use opts::forge::{Dependency, Opts, Subcommands};
 use std::process::Command;
 
@@ -14,7 +14,7 @@ use clap_complete::generate;
 fn main() -> eyre::Result<()> {
     color_eyre::install()?;
     utils::subscriber();
-    solc::report::init(BasicStdoutReporter::default());
+    compile::solc::report::init(BasicStdoutReporter::default());
 
     let opts = Opts::parse();
     match opts.sub {

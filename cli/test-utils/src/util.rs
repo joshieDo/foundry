@@ -1,4 +1,4 @@
-use ethers_solc::{
+use ethers_compile::{
     cache::SolFilesCache,
     project_util::{copy_dir, TempProject},
     ArtifactOutput, ConfigurableArtifacts, PathStyle, ProjectPathsConfig,

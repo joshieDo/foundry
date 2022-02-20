@@ -28,7 +28,7 @@ use ethers::{
     contract::EthLogDecode,
     core::{abi::AbiDecode, k256::ecdsa::SigningKey, utils},
     signers::{LocalWallet, Signer},
-    solc::{artifacts::CompactContractBytecode, ProjectPathsConfig},
+    compile::{artifacts::CompactContractBytecode, ProjectPathsConfig},
     types::{Address, H160, H256, U256},
 };
 

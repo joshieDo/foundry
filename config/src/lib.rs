@@ -15,11 +15,11 @@ use semver::Version;
 use serde::{Deserialize, Serialize};
 
 use ethers_core::types::{Address, U256};
-use ethers_solc::{
+use ethers_compile::{
     artifacts::{output_selection::ContractOutputSelection, Optimizer, OptimizerDetails, Settings},
-    error::SolcError,
+    error::CompilerError,
     remappings::{RelativeRemapping, Remapping},
-    ConfigurableArtifacts, EvmVersion, Project, ProjectPathsConfig, SolcConfig,
+    ConfigurableArtifacts, EvmVersion, Project, ProjectPathsConfig, CompilerConfig,
 };
 use figment::{providers::Data, value::Value};
 use inflector::Inflector;
@@ -359,23 +359,23 @@ impl Config {
     /// let config = Config::load_with_root(".").sanitized();
     /// let project = config.project();
     /// ```
-    pub fn project(&self) -> Result<Project, SolcError> {
+    pub fn project(&self) -> Result<Project, CompilerError> {
         self.create_project(true, false)
     }
 
     /// Same as [`Self::project()`] but sets configures the project to not emit artifacts and ignore
     /// cache, caching causes no output until https://github.com/gakonst/ethers-rs/issues/727
-    pub fn ephemeral_no_artifacts_project(&self) -> Result<Project, SolcError> {
+    pub fn ephemeral_no_artifacts_project(&self) -> Result<Project, CompilerError> {
         self.create_project(false, true)
     }
 
-    fn create_project(&self, cached: bool, no_artifacts: bool) -> Result<Project, SolcError> {
+    fn create_project(&self, cached: bool, no_artifacts: bool) -> Result<Project, CompilerError> {
         let project = Project::builder()
             .artifacts(self.configured_artifacts_handler())
             .paths(self.project_paths())
             .allowed_path(&self.__root.0)
             .allowed_paths(&self.libs)
-            .solc_config(SolcConfig::builder().settings(self.solc_settings()?).build())
+            .compiler_config(CompilerConfig::builder().settings(self.solc_settings()?).build())
             .ignore_error_codes(self.ignored_error_codes.clone())
             .set_auto_detect(self.auto_detect_solc)
             .set_offline(self.offline)
@@ -420,7 +420,7 @@ impl Config {
         }
     }
 
-    /// returns the [`ethers_solc::ConfigurableArtifacts`] for this config, that includes the
+    /// returns the [`ethers_compile::ConfigurableArtifacts`] for this config, that includes the
     /// `extra_output` fields
     pub fn configured_artifacts_handler(&self) -> ConfigurableArtifacts {
         ConfigurableArtifacts::new(self.extra_output.clone(), self.extra_output_files.clone())
@@ -430,7 +430,7 @@ impl Config {
     ///   - all libraries
     ///   - the optimizer (including details, if configured)
     ///   - evm version
-    pub fn solc_settings(&self) -> Result<Settings, SolcError> {
+    pub fn solc_settings(&self) -> Result<Settings, CompilerError> {
         let libraries = parse_libraries(&self.libraries)?;
         let optimizer = self.optimizer();
 
@@ -1066,12 +1066,12 @@ impl From<Chain> for u64 {
 
 fn canonic(path: impl Into<PathBuf>) -> PathBuf {
     let path = path.into();
-    ethers_solc::utils::canonicalize(&path).unwrap_or(path)
+    ethers_compile::utils::canonicalize(&path).unwrap_or(path)
 }
 
 #[cfg(test)]
 mod tests {
-    use ethers_solc::artifacts::YulDetails;
+    use ethers_compile::artifacts::YulDetails;
     use figment::error::Kind::InvalidType;
     use std::str::FromStr;
 

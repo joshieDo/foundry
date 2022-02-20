@@ -1,12 +1,12 @@
 //! build command
 
-use ethers::solc::{Project, ProjectCompileOutput};
+use ethers::compile::{Project, ProjectCompileOutput};
 use std::path::PathBuf;
 
 use crate::{cmd::Cmd, opts::forge::CompilerArgs};
 
 use clap::{Parser, ValueHint};
-use ethers::solc::remappings::Remapping;
+use ethers::compile::remappings::Remapping;
 use foundry_config::{
     figment::{
         self,
@@ -86,7 +86,7 @@ pub struct BuildArgs {
 
     #[clap(help = "the remappings", long, short)]
     #[serde(skip)]
-    pub remappings: Vec<ethers::solc::remappings::Remapping>,
+    pub remappings: Vec<ethers::compile::remappings::Remapping>,
 
     #[clap(help = "the env var that holds remappings", long = "remappings-env")]
     #[serde(skip)]

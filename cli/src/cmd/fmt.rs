@@ -2,7 +2,7 @@ use std::{fmt::Write, path::PathBuf};
 
 use clap::Parser;
 use console::{style, Style};
-use ethers::solc::ProjectPathsConfig;
+use ethers::compile::ProjectPathsConfig;
 use rayon::prelude::*;
 use similar::{ChangeTag, TextDiff};
 
@@ -52,7 +52,7 @@ impl Cmd for FmtArgs {
         };
 
         let paths = if root.is_dir() {
-            ethers::solc::utils::source_files(root)
+            ethers::compile::utils::source_files(root)
         } else if root.file_name().unwrap().to_string_lossy().ends_with(".sol") {
             vec![root]
         } else {

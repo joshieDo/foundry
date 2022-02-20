@@ -15,7 +15,7 @@ pub mod test_helpers {
     use super::*;
     use ethers::{
         prelude::Lazy,
-        solc::{AggregatedCompilerOutput, Project, ProjectPathsConfig},
+        compile::{AggregatedCompilerOutput, Project, ProjectPathsConfig},
         types::U256,
     };
     use evm_adapters::{

@@ -8,7 +8,7 @@ edition = "2021"
 
 [dependencies]
 tempfile = "3.2.0"
-ethers-solc = { git = "https://github.com/gakonst/ethers-rs", default-features = false, features = ["project-util"] }
+ethers-compile = { git = "https://github.com/gakonst/ethers-rs", default-features = false, features = ["project-util"] }
 walkdir = "2.3.2"
 once_cell = "1.9.0"
 foundry-config = { path = "../../config" }

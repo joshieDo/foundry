@@ -3,8 +3,8 @@
 use std::{collections::BTreeMap, path::PathBuf, str::FromStr};
 
 use crate::Config;
-use ethers_solc::{
-    error::SolcError,
+use ethers_compile::{
+    error::CompilerError,
     remappings::{Remapping, RemappingError},
 };
 use figment::value::Value;
@@ -100,21 +100,21 @@ pub fn remappings_from_env_var(env_var: &str) -> Option<Result<Vec<Remapping>, R
 /// ```
 pub fn parse_libraries(
     libs: &[String],
-) -> Result<BTreeMap<String, BTreeMap<String, String>>, SolcError> {
+) -> Result<BTreeMap<String, BTreeMap<String, String>>, CompilerError> {
     let mut libraries = BTreeMap::default();
     for lib in libs {
         let mut items = lib.split(':');
         let file = items
             .next()
-            .ok_or_else(|| SolcError::msg(format!("failed to parse invalid library: {}", lib)))?;
+            .ok_or_else(|| CompilerError::msg(format!("failed to parse invalid library: {}", lib)))?;
         let lib = items
             .next()
-            .ok_or_else(|| SolcError::msg(format!("failed to parse invalid library: {}", lib)))?;
+            .ok_or_else(|| CompilerError::msg(format!("failed to parse invalid library: {}", lib)))?;
         let addr = items
             .next()
-            .ok_or_else(|| SolcError::msg(format!("failed to parse invalid library: {}", lib)))?;
+            .ok_or_else(|| CompilerError::msg(format!("failed to parse invalid library: {}", lib)))?;
         if items.next().is_some() {
-            return Err(SolcError::msg(format!("failed to parse invalid library: {}", lib)))
+            return Err(CompilerError::msg(format!("failed to parse invalid library: {}", lib)))
         }
         libraries
             .entry(file.to_string())

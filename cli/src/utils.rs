@@ -1,6 +1,6 @@
 use std::str::FromStr;
 
-use ethers::{solc::EvmVersion, types::U256};
+use ethers::{compile::EvmVersion, types::U256};
 #[cfg(feature = "sputnik-evm")]
 use sputnik::Config;
 

@@ -23,7 +23,7 @@
 ///
 /// ```no_run
 /// use foundry_cli_test_utils::*;
-/// use foundry_cli_test_utils::ethers_solc::PathStyle;
+/// use foundry_cli_test_utils::ethers_compile::PathStyle;
 /// forgetest!(can_clean_hardhat, PathStyle::HardHat, |prj: TestProject, mut cmd: TestCommand| {
 ///     prj.assert_create_dirs_exists();
 ///     prj.assert_style_paths_exist(PathStyle::HardHat);
@@ -34,7 +34,7 @@
 #[macro_export]
 macro_rules! forgetest {
     ($test:ident, $fun:expr) => {
-        $crate::forgetest!($test, $crate::ethers_solc::PathStyle::Dapptools, $fun);
+        $crate::forgetest!($test, $crate::ethers_compile::PathStyle::Dapptools, $fun);
     };
     ($test:ident, $style:expr, $fun:expr) => {
         #[test]
@@ -49,7 +49,7 @@ macro_rules! forgetest {
 #[macro_export]
 macro_rules! forgetest_ignore {
     ($test:ident, $fun:expr) => {
-        $crate::forgetest_ignore!($test, $crate::ethers_solc::PathStyle::Dapptools, $fun);
+        $crate::forgetest_ignore!($test, $crate::ethers_compile::PathStyle::Dapptools, $fun);
     };
     ($test:ident, $style:expr, $fun:expr) => {
         #[test]
@@ -65,7 +65,7 @@ macro_rules! forgetest_ignore {
 #[macro_export]
 macro_rules! forgetest_init {
     ($test:ident, $fun:expr) => {
-        $crate::forgetest_init!($test, $crate::ethers_solc::PathStyle::Dapptools, $fun);
+        $crate::forgetest_init!($test, $crate::ethers_compile::PathStyle::Dapptools, $fun);
     };
     ($test:ident, $style:expr, $fun:expr) => {
         #[test]
@@ -91,7 +91,7 @@ macro_rules! forgetest_external {
         $crate::forgetest_external!(
             $test,
             $repo,
-            $crate::ethers_solc::PathStyle::Dapptools,
+            $crate::ethers_compile::PathStyle::Dapptools,
             $fork_block,
             Vec::<String>::new()
         );
@@ -105,7 +105,7 @@ macro_rules! forgetest_external {
         $crate::forgetest_external!(
             $test,
             $repo,
-            $crate::ethers_solc::PathStyle::Dapptools,
+            $crate::ethers_compile::PathStyle::Dapptools,
             $fork_block,
             $forge_opts
         );

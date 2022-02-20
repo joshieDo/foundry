@@ -1,8 +1,8 @@
 //! Contains various tests for checking forge's commands
-use ethers::solc::{artifacts::Metadata, ConfigurableContractArtifact};
+use ethers::compile::{artifacts::Metadata, ConfigurableContractArtifact};
 use evm_adapters::evm_opts::{EvmOpts, EvmType};
 use foundry_cli_test_utils::{
-    ethers_solc::{remappings::Remapping, PathStyle},
+    ethers_compile::{remappings::Remapping, PathStyle},
     forgetest, forgetest_ignore, forgetest_init, pretty_eq,
     util::{pretty_err, read_string, TestCommand, TestProject},
 };
@@ -250,7 +250,7 @@ forgetest_init!(can_emit_extra_output, |prj: TestProject, mut cmd: TestCommand| 
 
     let artifact_path = prj.paths().artifacts.join("Contract.sol/Contract.json");
     let artifact: ConfigurableContractArtifact =
-        ethers::solc::utils::read_json_file(artifact_path).unwrap();
+        ethers::compile::utils::read_json_file(artifact_path).unwrap();
     assert!(artifact.metadata.is_some());
 
     cmd.fuse()
@@ -259,7 +259,7 @@ forgetest_init!(can_emit_extra_output, |prj: TestProject, mut cmd: TestCommand| 
     cmd.assert_non_empty_stdout();
 
     let metadata_path = prj.paths().artifacts.join("Contract.sol/Contract.metadata.json");
-    let _artifact: Metadata = ethers::solc::utils::read_json_file(metadata_path).unwrap();
+    let _artifact: Metadata = ethers::compile::utils::read_json_file(metadata_path).unwrap();
 });
 
 // test against a local checkout, useful to debug with local ethers-rs patch

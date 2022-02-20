@@ -6,7 +6,7 @@ use crate::{
 };
 use ansi_term::Colour;
 use clap::{AppSettings, Parser};
-use ethers::solc::{ArtifactOutput, Project};
+use ethers::compile::{ArtifactOutput, Project};
 use evm_adapters::{
     call_tracing::ExecutionInfo, evm_opts::EvmOpts, gas_report::GasReport, sputnik::helpers::vm,
 };

@@ -9,7 +9,7 @@ use sputnik::{backend::Backend, Config};
 use ethers::{
     abi::{Abi, Event, Function},
     prelude::{artifacts::CompactContractBytecode, ArtifactId, ArtifactOutput},
-    solc::{Artifact, Project},
+    compile::{Artifact, Project},
     types::{Address, H256, U256},
 };
 
@@ -261,7 +261,7 @@ impl MultiContractRunner {
 mod tests {
     use super::*;
     use crate::test_helpers::{filter::Filter, EVM_OPTS};
-    use ethers::solc::ProjectPathsConfig;
+    use ethers::compile::ProjectPathsConfig;
     use std::path::PathBuf;
 
     fn project() -> Project {

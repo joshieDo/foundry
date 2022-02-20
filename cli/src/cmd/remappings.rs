@@ -2,7 +2,7 @@
 
 use crate::cmd::Cmd;
 use clap::{Parser, ValueHint};
-use ethers::solc::{remappings::Remapping, ProjectPathsConfig};
+use ethers::compile::{remappings::Remapping, ProjectPathsConfig};
 use std::path::PathBuf;
 
 /// Command to list remappings

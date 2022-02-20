@@ -1,6 +1,6 @@
 use clap::{Parser, Subcommand, ValueHint};
 
-use ethers::solc::{artifacts::output_selection::ContractOutputSelection, EvmVersion};
+use ethers::compile::{artifacts::output_selection::ContractOutputSelection, EvmVersion};
 use std::{path::PathBuf, str::FromStr};
 
 use crate::cmd::{

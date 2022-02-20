@@ -593,7 +593,7 @@ fn revert<S: Clone, E: Evm<S> + evm_adapters::Evm<S, ReturnReason = T>, T>(_evm:
 mod tests {
     use super::*;
     use crate::test_helpers::{filter::Filter, BACKEND, COMPILED, EVM_OPTS};
-    use ethers::solc::artifacts::CompactContractRef;
+    use ethers::compile::artifacts::CompactContractRef;
 
     mod sputnik {
         use ::sputnik::backend::MemoryBackend;

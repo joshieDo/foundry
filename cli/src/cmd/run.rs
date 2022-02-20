@@ -7,13 +7,13 @@ use foundry_utils::IntoFunction;
 use std::{collections::BTreeMap, path::PathBuf};
 use ui::{TUIExitReason, Tui, Ui};
 
-use ethers::solc::Project;
+use ethers::compile::Project;
 
 use crate::opts::evm::EvmArgs;
 use ansi_term::Colour;
 use ethers::{
     abi::Abi,
-    solc::artifacts::{CompactContractBytecode, ContractBytecode, ContractBytecodeSome},
+    compile::artifacts::{CompactContractBytecode, ContractBytecode, ContractBytecodeSome},
 };
 use evm_adapters::{
     call_tracing::ExecutionInfo,

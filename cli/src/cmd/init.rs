@@ -10,7 +10,7 @@ use foundry_config::Config;
 
 use crate::cmd::install::DependencyInstallOpts;
 use ansi_term::Colour;
-use ethers::solc::remappings::Remapping;
+use ethers::compile::remappings::Remapping;
 use std::{
     path::{Path, PathBuf},
     process::{Command, Stdio},
