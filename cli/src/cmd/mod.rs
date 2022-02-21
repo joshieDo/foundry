@@ -54,11 +54,11 @@ pub mod verify;
 use crate::opts::forge::ContractInfo;
 use ethers::{
     abi::Abi,
+    compile::{artifacts::Source, cache::SolFilesCache},
     prelude::{
         artifacts::{CompactBytecode, CompactDeployedBytecode},
         Graph,
     },
-    compile::{artifacts::Source, cache::SolFilesCache},
 };
 use std::path::PathBuf;
 
@@ -68,7 +68,9 @@ pub trait Cmd: clap::Parser + Sized {
     fn run(self) -> eyre::Result<Self::Output>;
 }
 
-use ethers::compile::{artifacts::CompactContractBytecode, Project, ProjectCompileOutput};
+use ethers::compile::{
+    artifacts::CompactContractBytecode, CompilerTrait, Project, ProjectCompileOutput,
+};
 
 /// Compiles the provided [`Project`], throws if there's any compiler error and logs whether
 /// compilation was successful or if there was a cache hit.
@@ -107,8 +109,8 @@ pub fn manual_compile(
     println!("compiling...");
     if project.auto_detect {
         tracing::trace!("using solc auto detection to compile sources");
-    let output = project.svm_compile(sources)?;
-    if output.has_compiler_errors() {
+        let output = project.svm_compile(sources)?;
+        if output.has_compiler_errors() {
             // return the diagnostics error back to the user.
             eyre::bail!(output.to_string())
         }
@@ -117,7 +119,8 @@ pub fn manual_compile(
 
     let mut solc = project.solc.clone();
     if !project.allowed_lib_paths.is_empty() {
-        solc = solc.arg("--allow-paths").arg(project.allowed_lib_paths.to_string());
+        solc.arg("--allow-paths".to_string());
+        solc.arg(project.allowed_lib_paths.to_string());
     }
 
     let (sources, _) = Graph::resolve_sources(&project.paths, sources)?.into_sources();
