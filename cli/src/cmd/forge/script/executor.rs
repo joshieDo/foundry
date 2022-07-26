@@ -113,6 +113,10 @@ impl ScriptArgs {
                         )
                         .expect("Internal EVM error");
 
+                    if self.slow {
+                        runner.executor.env_mut().block.number += U256::one();
+                    }
+
                     // We inflate the gas used by the transaction by x1.3 since the estimation
                     // might be off
                     tx.gas = Some(U256::from(result.gas * 13 / 10));

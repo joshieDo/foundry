@@ -90,6 +90,11 @@ impl Executor {
     }
 
     /// Returns a mutable reference to the Backend
+    pub fn env_mut(&mut self) -> &mut Env {
+        &mut self.env
+    }
+
+    /// Returns a mutable reference to the Backend
     pub fn backend_mut(&mut self) -> &mut Backend {
         &mut self.backend
     }
@@ -251,6 +256,8 @@ impl Executor {
         // Build VM
         let mut evm = EVM::new();
         evm.env = self.build_env(from, TransactTo::Call(to), calldata, value);
+        dbg!(evm.env.block.number);
+        dbg!(evm.env.tx.gas_price);
         let mut inspector = self.inspector_config.stack();
         evm.database(self.backend_mut());
 
@@ -482,6 +489,7 @@ impl Executor {
 
     /// Creates the environment to use when executing the transaction
     fn build_env(&self, caller: Address, transact_to: TransactTo, data: Bytes, value: U256) -> Env {
+        dbg!(&self.env.block.number);
         Env {
             cfg: self.env.cfg.clone(),
             // We always set the gas price to 0 so we can execute the transaction regardless of
